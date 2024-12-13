@@ -8,16 +8,23 @@
 
 #define NOMBRE_PROCESSUS 2
 #define NOMBRE_SEMAPHORE 2
+
+enum { RDV1=0, RDV2=1 };
+
 int main() {
     // Clé unique pour les sémaphores
     key_t key = ftok("monfichier", 'A');
     if (key == -1) {
-        perror("Erreur dans ftok");
-        return 1;
+        perror("ftok");
+        exit(EXIT_FAILURE);
     }
+
 
     // Création d'un ensemble de sémaphores (nombre_semaphore sémaphore)
     int sem_id = create_semaphore(key, NOMBRE_SEMAPHORE, IPC_CREAT | 0666);
+
+
+
 
     // Initialisation du sémaphores à 1
     for( int i = 0 ; i < NOMBRE_SEMAPHORE ; i++){
@@ -26,8 +33,8 @@ int main() {
     //************************* //
 
     printf("Création de 2 processus concurrents...\n");
-    pid_t pid1 = fork();
-    switch (pid1)
+   
+    switch (fork())
     {
     case -1:
         perror("fork1");
@@ -36,23 +43,23 @@ int main() {
         printf("Processus 1 : Début de la tâche...\n");
         sleep(1); // Simule une tâche
         printf("Processus 1 : Fin de la tâche. Signal au processus 2.\n");
-        V(sem_id,1);
-        P(sem_id,0);
+        V(sem_id,RDV2);
+        P(sem_id,RDV1);
         printf("Processus 1 : Rendez-vous terminé.\n");
         exit(EXIT_SUCCESS); 
     }
-    pid_t pid2 = fork();
-    switch (pid2)
+    
+    switch (fork())
     {
     case -1: 
-        perror("fork 2");
+        perror("fork2");
         exit(EXIT_FAILURE);
     case 0:
         printf("Processus 2 : Début de la tâche...\n");
         sleep(10); // Simule une tâche (plus long pour simuler un délai)
         printf("Processus 2 : Fin de la tâche. Signal au processus 1.\n");
-        V(sem_id , 0);
-        P(sem_id , 1);
+        V(sem_id ,RDV1);
+        P(sem_id ,RDV2);
         printf("Processus 2 : Rendez-vous terminé.\n");
         exit(EXIT_SUCCESS);
     }  
@@ -67,5 +74,5 @@ int main() {
 
     printf("Tous les processus sont terminés.\n");
 
-    return 0;
+    exit(EXIT_SUCCESS);
 }
