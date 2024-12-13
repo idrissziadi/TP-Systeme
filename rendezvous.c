@@ -5,7 +5,7 @@
 #include <sys/ipc.h>
 #include <sys/wait.h>
 #include "semaphore.h"
-
+//idriss
 #define NOMBRE_PROCESSUS 2
 #define NOMBRE_SEMAPHORE 2
 
