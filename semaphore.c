@@ -48,3 +48,4 @@ void V(int sem_id, int sem_num) {
         exit(EXIT_FAILURE);
     }
 }
+ 
