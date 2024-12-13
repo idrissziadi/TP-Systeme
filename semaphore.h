@@ -9,10 +9,10 @@
 int create_semaphore(key_t key, int num_sems, int flags);
 
 // Initialisation d'un sémaphore spécifique
-int initialize_semaphore(int sem_id, int sem_num, int value);
+void initialize_semaphore(int sem_id, int sem_num, int value);
 
 // Suppression d'un ensemble de sémaphores
-int delete_semaphore(int sem_id);
+void delete_semaphore(int sem_id);
 
 // Primitives P et V pour la gestion des sémaphores
 void P(int sem_id, int sem_num);
