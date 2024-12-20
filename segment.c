@@ -44,15 +44,4 @@ void delete_shared_memory(int shmid) {
     }
 }
 
-// Fonction de dépôt dans le tampon
-void deposer(file_t f, objet_t d) {
-    f.buf[*(f.fin)] = d;
-    *(f.fin) = (*(f.fin) + 1) % TAILLE_TAMPON;
-}
 
-// Fonction de retrait du tampon
-objet_t retirer(file_t f) {
-    objet_t d = f.buf[*(f.debut)];
-    *(f.debut) = (*(f.debut) + 1) % TAILLE_TAMPON;
-    return d;
-}
